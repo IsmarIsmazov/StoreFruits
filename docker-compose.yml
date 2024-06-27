@@ -1,0 +1,18 @@
+version: '3.9'
+services:
+  backend:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: backend
+    command: >
+      sh -c "cd /Store &&
+      python manage.py makemigrations &&
+      python manage.py migrate &&
+      python create_user.py &&
+      python manage.py runserver 0.0.0.0:80"
+    ports:
+      - "80:80"
+networks:
+  backend:
+    driver: bridge
