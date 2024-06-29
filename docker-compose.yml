@@ -1,18 +1,37 @@
 version: '3.9'
 services:
+  postgres-db:
+    image: 'postgres:15'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
   backend:
     build:
       context: ./
       dockerfile: Dockerfile
     container_name: backend
+    env_file:
+      - .env
+    environment:
+      DJANGO_SUPERUSER_USERNAME: ${ADMIN_NAME}
+      DJANGO_SUPERUSER_EMAIL: ${ADMIN_EMAIL}
+      DJANGO_SUPERUSER_PASSWORD: ${ADMIN_PASSWORD}
     command: >
-      sh -c "cd /Store &&
-      python manage.py makemigrations &&
-      python manage.py migrate &&
-      python create_user.py &&
-      python manage.py runserver 0.0.0.0:80"
+      sh -c "
+        cd /Store &&
+        python manage.py makemigrations &&
+        python manage.py migrate &&
+        python manage.py createsuperuser --noinput &&
+        python manage.py runserver 0.0.0.0:80"
     ports:
       - "80:80"
 networks:
   backend:
     driver: bridge
+volumes:
+  postgres-data:
