@@ -52,4 +52,4 @@ CORS_ORIGIN_WHITELIST = ['http://localhost:3000']
 LOCAL_HOST = ['*']
 ALLOWED_HOSTS = LOCAL_HOST + CORS_ALLOWED_ORIGINS
 
-CSRF_TRUSTED_ORIGINS = ["https://5bee-109-201-165-30.ngrok-free.app"]
+CSRF_TRUSTED_ORIGINS = ["http://localhost"]
