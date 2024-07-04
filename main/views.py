@@ -20,7 +20,7 @@ class ProductViewSet(ModelViewSet):
     serializer_class = ProductSerializer
 
     def get_queryset(self):
-        queryset = self.queryset
+        queryset = Products.objects.all()
         name_param = self.request.query_params.get('name', None)
         if name_param:
             queryset = queryset.filter(catalog__name__icontains=name_param)
